@@ -1,5 +1,9 @@
 # Лабораторная работа 2
 
+## Дедлайн сдачи работы без пенальти
+
+10.12.2024 00:00
+
 ## Как выполнять
 
 -   Сделать форк **вашей** лабораторной работы номер один с названием `up09-lab2-{ваша_фамилия}`
@@ -109,8 +113,8 @@ def posts_list(request):
 2. Измените шаблон `posts_list.html`
 
 ```html
-{% extends 'layout.html' %} {% block title %} Posts {% endblock %} {% block
-content %}
+{% extends 'layout.html' %} {% block title %} Posts {% endblock %}
+{% block content %}
 <section>
     <h1>Posts</h1>
 
@@ -173,3 +177,62 @@ def post_page(request, slug):
     post = Post.objects.get(slug=slug)
     return render(request, 'posts/post_page.html', {'post': post})
 ```
+
+5. Добавить ссылку к заголовку поста в шаблоне списка постов
+
+```html
+<h2>
+    <a href="{%  url 'posts:page' slug=post.slug %}"> {{ post.title }} </a>
+</h2>
+```
+
+6. Добавьте название для ссылок в `posts/urls.py`, чтобы разграничивать маршруты приложений
+
+```python
+...
+from . import views
+
+app_name = 'posts'
+
+urlpatterns = [
+...
+```
+
+> [!WARNING]
+>
+> Используйте это названия в ссылках, которые ведут на приложение связанное с постами
+>
+> `layout.html`
+>
+> ```html
+> <a href="{% url 'posts:list' %}"> ... </a>
+> ```
+>
+> Обновите название для списка постов в `posts/urls.py`
+>
+> `posts/urls.py`
+>
+> ```python
+> path('', views.posts_list, name="list"),
+> ```
+
+7. Создайте шаблон отображения `posts/templates/posts/post_page.html` для отображения поста
+
+```html
+{% extends 'layout.html' %} {% block title %} {{ post.title }} {% endblock %}
+{% block content %}
+<section>
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.date }}</p>
+    <p>{{ post.body }}</p>
+</section>
+{% endblock %}
+```
+
+> [!NOTE]
+>
+> **Создайте такой же функционал для сообществ**
+>
+> -   Список с сообществами
+> -   При нажатии на сообщество должен быть переход на страницу сообщества
+> -   На странице сообщества должно показываться название сообщества и его краткое описание
