@@ -130,3 +130,46 @@ content %}
 > **Задание 3**
 >
 > Сделайте так, чтобы группы выводились по адресу `localhost:8000/communities`
+
+## 5. Добавляем название страницы
+
+1. Добавьте название для страницы постов в `posts/urls.py`
+
+```python
+urlpatterns = [
+    path('', views.posts_list, name="posts"),
+]
+```
+
+2. Замените ссылку на страницу posts в html на `{% url 'posts' %}`
+
+> [!NOTE]
+>
+> **Задание 4**
+>
+> Сделайте так, чтобы к переход к группам также происходил по `name`, а не прямому URL
+
+---
+
+### Источники
+
+-   [Django преобразование URL](https://docs.djangoproject.com/en/5.1/topics/http/urls/)
+
+---
+
+3. Добавляем slug для использования в адресах постов в `posts/urls.py`
+
+```python
+urlpatterns = [
+    path('', views.posts_list, name="posts"),
+    path('<slug:slug>', views.post_page, name="page")
+]
+```
+
+4. Добавляем маршрут slug маршрут для постов в `posts/views.py`
+
+```python
+def post_page(request, slug):
+    post = Post.objects.get(slug=slug)
+    return render(request, 'posts/post_page.html', {'post': post})
+```
